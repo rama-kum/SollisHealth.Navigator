@@ -16,7 +16,11 @@ namespace SollisHealth.Navigator.Services
             _userRepo = userRepo;
         }
 
-  
+ /// <summary>
+ /// Adds user signin information with userinput 
+ /// </summary>
+ /// <param name="userInput"></param>
+ /// <returns></returns> 
         public async Task<UserSignInResponse> AddUserforSignIn(SignInUserUIRequest userInput)
         {
             UserSignInResponse userresponse = await _userRepo.AddUserforSignIn(userInput);
