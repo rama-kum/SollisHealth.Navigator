@@ -40,12 +40,11 @@ namespace SollisHealth.Navigator
             services = new StartupCommon(Configuration).ConfigureServices(services);
             AesCryptoUtil _AesCryptoUtil = new AesCryptoUtil();
             var connectionstring = Configuration.GetConnectionString("NavigatorConnection");
-            //   var deconnectionstring1 = _AesCryptoUtil.Encrypt(connectionstring);
-            // var deconnectionstring = _AesCryptoUtil.Decrypt(deconnectionstring1);
-           // var deconnectionstring = _AesCryptoUtil.Decrypt(connectionstring);
-          //  deconnectionstring = deconnectionstring.Replace("\v", "");
-          //  services.AddDbContextPool<UserDbContext>(options => options.UseMySQL(deconnectionstring));
-              services.AddDbContextPool<SignInUserDbContext>(options => options.UseMySQL(connectionstring));
+             //  var deconnectionstring = _AesCryptoUtil.Encrypt(connectionstring);
+             var deconnectionstring1 = _AesCryptoUtil.Decrypt(connectionstring);
+            connectionstring = deconnectionstring1.Replace("\u0006", "");
+            services.AddDbContextPool<SignInUserDbContext>(options => options.UseMySQL(connectionstring));
+          //    services.AddDbContextPool<SignInUserDbContext>(options => options.UseMySQL(connectionstring));
             services.AddScoped<IUserSignInBO, UserSignInBO>();
             services.AddScoped<IUserSignInRepo, UserSignInRepo>();
             services.AddScoped<IUpdateUserSignOutBO, UpdateUserSignOutBO>();

@@ -40,48 +40,15 @@ namespace SollisHealth.Navigator.Repository
             obj_userresponse.Message = "";
 
             signinuser.User_Name = userrequestdata.UserName.Trim();
-
-            //Email validation
-            Validations emailcontext = new Validations();
-            bool email_validate = emailcontext.ValidateEmail(userrequestdata.UserEmail.Trim());
-            if (email_validate == true)
-            {
-                signinuser.User_Email = userrequestdata.UserEmail.Trim();
-            }
-            else
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = userrequestdata.UserEmail + " is Invalid Email Address";
-            }
-           
+            signinuser.User_Email = userrequestdata.UserEmail.Trim();          
             signinuser.Depatment_Name = userrequestdata.DepartmentName.Trim();
             signinuser.Contact_Type = userrequestdata.ContactType.Trim();
             signinuser.Contact_Number = userrequestdata.ContactNumber.Trim();
             signinuser.Service = userrequestdata.Service.Trim();
             signinuser.User_Role = userrequestdata.UserRole.Trim();
-
-            //signin date validation
-            Validations validationcontext = new Validations();
-            bool signin_validate = validationcontext.ValidateDateTime(userrequestdata.SignInDate.ToUniversalTime());                    
-            if (signin_validate ==true)
             signinuser.Sign_in_date = userrequestdata.SignInDate.ToUniversalTime();
-            else
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = "Enter time value in SignIn Date";
-            }
+            signinuser.Sign_Out_Date = userrequestdata.SignOutDate.ToUniversalTime();
 
-            //signout date validation
-            bool signout_validate = validationcontext.ValidateDateTime(userrequestdata.SignOutDate.ToUniversalTime());
-            if (signout_validate == true)
-                signinuser.Sign_Out_Date = userrequestdata.SignOutDate.ToUniversalTime();
-            else
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = "Enter time value in SignOut Date";
-            }
-
-           
             signinuser.Sign_Status = 1;
             signinuser.Shift = userrequestdata.Shift.Trim();
             signinuser.Comments = userrequestdata.Comments.Trim();
@@ -111,7 +78,7 @@ namespace SollisHealth.Navigator.Repository
                     obj_userresponse.success = false;
                 }
             }
-                return obj_userresponse;
+            return obj_userresponse;
  
 
            

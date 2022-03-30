@@ -66,55 +66,7 @@ namespace SollisHealth.Navigator.UnitTest
             }
 
         }
-
-        [TestMethod]
-        public void AddUserSigninFAILURE_Repository()
-        {
-            var options = new DbContextOptionsBuilder<SignInUserDbContext>()
-                         .UseInMemoryDatabase(databaseName: "NavigatorDataBase")
-                         .Options;
-
-            using (var context = new SignInUserDbContext(options))
-            {
-                SignInUserUIRequest userrequestdata = new SignInUserUIRequest();
-                userrequestdata.UserEmail = "invalidemail";
-
-                context.User_sign_details.Add(new SignInUserRequest
-                {
-
-                    User_Name = userrequestdata.UserName,
-                    User_Email = userrequestdata.UserEmail,
-                    Depatment_Name = userrequestdata.DepartmentName,
-                    Contact_Type = userrequestdata.ContactType,
-                    Contact_Number = userrequestdata.ContactNumber,
-                    Service = userrequestdata.Service,
-                    User_Role = userrequestdata.UserRole,
-                    Sign_in_date = userrequestdata.SignInDate.ToUniversalTime(),
-                    Sign_Out_Date = userrequestdata.SignOutDate.ToUniversalTime(),
-                    Sign_Status = 0,
-                    Shift = userrequestdata.Shift,
-                    Comments = userrequestdata.Comments,
-                    Createddate = System.DateTime.Now,
-                    Createduser = userrequestdata.UserName,
-                    Modifieduser = null,
-                    Processed = 0
-
-
-                });
-
-                context.SaveChanges();
-
-                UserSignInRepo repoObject = new UserSignInRepo(context);
-                Task<UserSignInResponse> result = repoObject.AddUserforSignIn(userrequestdata);
-
-                var actualResult = result.Result.data;
-                Assert.IsTrue(result.IsCompletedSuccessfully);
-                Assert.AreEqual(result.Result.success, false);
-
-            }
-
-        }
-
+ 
 
         [TestMethod]
         public void AddUserSigninSUCCESS_BO()
@@ -162,23 +114,7 @@ namespace SollisHealth.Navigator.UnitTest
             return Task.FromResult(obj_userresponse);
         }
 
-
-        [TestMethod]
-        public void AddUserSigninFAILURE_BO()
-        {
-            SignInUserUIRequest userrequestdata = new SignInUserUIRequest();
-            userrequestdata = UserSigninINValidData();
-            var mockusersigninRepo = new Mock<IUserSignInRepo>();
-            mockusersigninRepo.Setup(x => x.AddUserforSignIn(userrequestdata)).Returns(GetUsersigninIDInvalid);
-
-            UserSignInBO memberBO = new UserSignInBO(mockusersigninRepo.Object);
-            Task<UserSignInResponse> result = memberBO.AddUserforSignIn(userrequestdata);
-
-            Assert.IsTrue(result.IsCompletedSuccessfully);
-            Assert.AreEqual(result.Result.success, false);
-        }
-
-        private SignInUserUIRequest UserSigninINValidData()
+        private SignInUserUIRequest UserSigninInValidData()
         {
             SignInUserUIRequest userrequestdata = new SignInUserUIRequest();
             userrequestdata.UserName = "";
@@ -240,7 +176,7 @@ namespace SollisHealth.Navigator.UnitTest
             var mockGetSigninStatus = new Mock<IGetSigninStatusBO>();
 
             SignInUserUIRequest userrequestdata = new SignInUserUIRequest();
-            userrequestdata = UserSigninINValidData();
+            userrequestdata = UserSigninInValidData();
             var mockuserlistobj = new Mock<UserSignInResponse>();
 
             UserController UserControllerobj = new UserController(logger, mockUserSignIn.Object, mockUpdateUserSignOut.Object, mockGetSigninStatus.Object);
