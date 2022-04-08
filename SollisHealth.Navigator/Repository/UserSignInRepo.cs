@@ -15,11 +15,8 @@ namespace SollisHealth.Navigator.Repository
 {
     public class UserSignInRepo : IUserSignInRepo
     {
-        private readonly SignInUserDbContext _userdbcontext;
-        
-        private readonly Validations _validationcontext;
-
-        public UserSignInRepo(SignInUserDbContext userdbcontext)
+        private readonly SignInUserDbContext _userdbcontext;        
+       public UserSignInRepo(SignInUserDbContext userdbcontext)
         {
             _userdbcontext = userdbcontext;
            // _validationcontext = validationcontext;
@@ -70,11 +67,11 @@ namespace SollisHealth.Navigator.Repository
                 {
                     obj_userresponse.data = obj_useridoutput;
                     obj_userresponse.success = true;
-                    obj_userresponse.Message = "User SignIn information successfully registered";
+                    obj_userresponse.Message = "Adding user SignIn details is successfull";
                 }
                 else
                 {
-                    obj_userresponse.Message = "User SignIn registration is not successfull";
+                    obj_userresponse.Message = "Adding user SignIn details is not successfull";
                     obj_userresponse.success = false;
                 }
             }

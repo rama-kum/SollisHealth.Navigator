@@ -25,7 +25,7 @@ namespace SollisHealth.Navigator.UnitTest
     public class GetUserSignInStatusUnitTest
     {
         [TestMethod]
-        public void GetUserSignInStatusSuccess_Repository()
+        public void GetUserSignInStatusSUCCESS_Repository()
         {
             var options = new DbContextOptionsBuilder<SignInUserDbContext>()
                         .UseInMemoryDatabase(databaseName: "NavigatorDataBase")

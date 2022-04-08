@@ -66,7 +66,7 @@ namespace SollisHealth.Navigator.UnitTest
             }
 
         }
- 
+  
 
         [TestMethod]
         public void AddUserSigninSUCCESS_BO()
@@ -114,9 +114,26 @@ namespace SollisHealth.Navigator.UnitTest
             return Task.FromResult(obj_userresponse);
         }
 
+        [TestMethod]
+        public void AddUserSigninFAILURE_BO()
+        {
+            SignInUserUIRequest userrequestdata = new SignInUserUIRequest();
+            userrequestdata = UserSigninInValidData();
+            var mockusersigninRepo = new Mock<IUserSignInRepo>();
+            mockusersigninRepo.Setup(x => x.AddUserforSignIn(userrequestdata)).Returns(GetUsersigninIDInvalid);
+
+            UserSignInBO memberBO = new UserSignInBO(mockusersigninRepo.Object);
+            Task<UserSignInResponse> result = memberBO.AddUserforSignIn(userrequestdata);
+
+            Assert.IsTrue(result.IsCompletedSuccessfully);
+            Assert.AreEqual(result.Result.data.UserSignInId, 0);
+        }
+
+
         private SignInUserUIRequest UserSigninInValidData()
         {
             SignInUserUIRequest userrequestdata = new SignInUserUIRequest();
+          
             userrequestdata.UserName = "";
             userrequestdata.UserEmail = "Invalidemail";
             userrequestdata.DepartmentName = "";
@@ -134,8 +151,8 @@ namespace SollisHealth.Navigator.UnitTest
         {
             UserSignInOutput obj_useridoutput = new UserSignInOutput();
             UserSignInResponse obj_userresponse = new UserSignInResponse();
-            // obj_useridoutput.UserSignInId = null; 
-            // obj_userresponse.data = obj_useridoutput;
+             obj_useridoutput.UserSignInId = 0; 
+             obj_userresponse.data = obj_useridoutput;
             obj_userresponse.success = false;
 
             return Task.FromResult(obj_userresponse);

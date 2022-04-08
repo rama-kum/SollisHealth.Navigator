@@ -15,8 +15,12 @@ using System.Threading.Tasks;
 
 namespace SollisHealth.Navigator.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
+
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}")]
+
     public class UserController : ControllerBase
     {
         private readonly IUserSignInBO _IUserSignIn;
@@ -39,7 +43,7 @@ namespace SollisHealth.Navigator.Controllers
 
         [HttpPost]
         [MapToApiVersion("1.0")]
-        [Route("NewUserRegistration")]
+        [Route("AddUserSignInDetails")]
         public async Task<IActionResult> AddUserSignInfo(SignInUserUIRequest userrequest)
         {
             _logger.LogInformation("Navigator Controller is running in " + DateTime.Now);
@@ -98,7 +102,7 @@ namespace SollisHealth.Navigator.Controllers
 
         [HttpPost]
         [MapToApiVersion("1.0")]
-        [Route("UpdateUserSignOut")]
+        [Route("UserSignOut")]
         public async Task<IActionResult> UpdateUserSignOut(UpdateSignInUserRequest userrequest)
         {
             _logger.LogInformation("Navigator Controller is running in " + DateTime.Now);

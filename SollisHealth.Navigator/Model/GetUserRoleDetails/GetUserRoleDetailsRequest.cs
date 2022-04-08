@@ -5,15 +5,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SollisHealth.Navigator.Model.GetSignInStatus
+namespace SollisHealth.Navigator.Model.GetUserRoleDetails
 {
-    public class GetSignInStatusUserOutputUI
+    public class GetUserRoleDetailsRequest
     {
         [Key]
-        public int UserSignInid { get; set; }
-        public bool UserSignInStatus { get; set; }
-      
+        public string UserEmail { get; set; }
+
+        public string UserRole { get; set; }
+
 
     }
- 
+
 }

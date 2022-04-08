@@ -34,7 +34,7 @@ namespace SollisHealth.Navigator.Model.Repository
                               .Select(p => new GetSignInStatusUserOutputUI
                               {
                                   UserSignInid = p.User_Sign_id,
-                                  UserSignInStatus = p.Sign_Status
+                                  UserSignInStatus = p.Sign_Status == 0 ? false : true
                                  
                               }).ToListAsync();
 

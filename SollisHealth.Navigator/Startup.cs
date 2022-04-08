@@ -51,6 +51,8 @@ namespace SollisHealth.Navigator
             services.AddScoped<IUpdateUserSignOutRepo, UpdateUserSignOutRepo>();
             services.AddScoped<IGetSigninStatusBO, GetSignInStatusBO>();
             services.AddScoped<IGetSigninStatusRepo, GetSignInStatusRepo>();
+            services.AddScoped<IGetUserRoleDetailsRepo, GetUserRoleDetailsRepo>();
+            services.AddScoped<IGetUserRoleDetailsBO, GetUserRoleDetailsBO>();
             // services.AddScoped<MysqlHelper>();
         }
 

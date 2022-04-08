@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SollisHealth.Navigator.Model;
 using SollisHealth.Navigator.Model.GetSignInStatus;
+using SollisHealth.Navigator.Model.GetUserRoleDetails;
 using SollisHealth.Navigator.Model.UserSignIn;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace SollisHealth.Navigator.Helper
         }
         public DbSet<SignInUserRequest> User_sign_details { get; set; }
         public DbSet<GetSignInStatusUserOutput> vm_user_sign_details { get; set; }
+        public DbSet<GetUserRoleDetailsOutput> vm_user_role { get; set; }
 
 
     }
