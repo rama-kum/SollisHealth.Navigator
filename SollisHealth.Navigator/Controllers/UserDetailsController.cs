@@ -38,34 +38,14 @@ namespace SollisHealth.Navigator.Controllers
         [Route("GetUserDetails")]
         public async Task<IActionResult> GetUserDetails(GetUserRoleDetailsRequest userrequest)
         {
-            _logger.LogInformation("Navigator User Controller is running in " + DateTime.Now);
+            _logger.LogInformation("User Details Controller is running in " + DateTime.Now);
             GetUserRoleDetailsValidationResponse obj_userresponse = new GetUserRoleDetailsValidationResponse();
+            GetUserRoleDetailsValidationResponse obj_userresponserepo = new GetUserRoleDetailsValidationResponse();
             obj_userresponse.success = true;
             obj_userresponse.Message = "";
 
-            //Email validation
-            if (userrequest.UserEmail.Trim() == "")
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = userrequest.UserEmail + "UserEmail address should not be empty";
-            }
-            else if (userrequest.UserRole.Trim() == "")
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = userrequest.UserRole + "UserRole should not be empty";
-
-            }
-            else if(userrequest.UserEmail.Trim() != "")
-            {
-                Validations emailcontext = new Validations();
-                bool email_validate = emailcontext.ValidateEmail(userrequest.UserEmail.Trim());
-
-                if (email_validate == false)
-                {
-                    obj_userresponse.success = false;
-                    obj_userresponse.Message = userrequest.UserEmail + " is Invalid Email Address";
-                }
-            }
+            obj_userresponse = validation_func(userrequest);
+ 
 
             if (obj_userresponse.success == false)
             {
@@ -83,11 +63,41 @@ namespace SollisHealth.Navigator.Controllers
                 else
                 {
                     _logger.LogError("User Details not found in " + DateTime.Now);
-                    obj_userresponse = BuildGetUserRoleDetailsResponseMessage(userlistobj.Message, false, 404);
-                    return BadRequest(obj_userresponse);
+                    obj_userresponserepo = BuildGetUserRoleDetailsResponseMessage(userlistobj.Message, false, 404);
+                    return BadRequest(obj_userresponserepo);
                 }
             }
 
+        }
+        private GetUserRoleDetailsValidationResponse validation_func(GetUserRoleDetailsRequest userrequest)
+        {
+            GetUserRoleDetailsValidationResponse validationresponse = new GetUserRoleDetailsValidationResponse();
+            validationresponse.success = true;
+            validationresponse.Message = "";
+           
+            if (userrequest.UserEmail.Trim() == "")
+            {
+                validationresponse.success = false;
+                validationresponse.Message = userrequest.UserEmail + "UserEmail address should not be empty";
+            }
+            else if (userrequest.UserRole.Trim() == "")
+            {
+                validationresponse.success = false;
+                validationresponse.Message = userrequest.UserRole + "UserRole should not be empty";
+
+            }
+            else if (userrequest.UserEmail.Trim() != "")
+            {
+                Validations emailcontext = new Validations();
+                bool email_validate = emailcontext.ValidateEmail(userrequest.UserEmail.Trim());
+
+                if (email_validate == false)
+                {
+                    validationresponse.success = false;
+                    validationresponse.Message = userrequest.UserEmail + " is Invalid Email Address";
+                }
+            }
+            return validationresponse;
         }
 
         private GetUserRoleDetailsValidationResponse BuildGetUserRoleDetailsResponseMessage(string message, bool boolmsg, int statuscode)

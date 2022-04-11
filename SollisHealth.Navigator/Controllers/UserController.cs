@@ -46,36 +46,13 @@ namespace SollisHealth.Navigator.Controllers
         [Route("AddUserSignInDetails")]
         public async Task<IActionResult> AddUserSignInfo(SignInUserUIRequest userrequest)
         {
-            _logger.LogInformation("Navigator Controller is running in " + DateTime.Now);
+            _logger.LogInformation("User Navigator Controller is running in " + DateTime.Now);
             UserSignInValidationResponse obj_userresponse = new UserSignInValidationResponse();
+            UserSignInValidationResponse obj_userresponserepo = new UserSignInValidationResponse();
             obj_userresponse.success = true;
             obj_userresponse.Message = "";
 
-            //Email validation
-            Validations emailcontext = new Validations();
-            bool email_validate = emailcontext.ValidateEmail(userrequest.UserEmail.Trim());
-            if (email_validate == false)
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = userrequest.UserEmail + " is Invalid Email Address";
-            }
-            //signin date validation
-            Validations validationsignindate = new Validations();
-            bool signin_validate = validationsignindate.ValidateDateTime(userrequest.SignInDate.ToUniversalTime());
-            if (signin_validate == false)
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = "Enter time value in SignIn Date";
-            }
-
-            //signout date validation
-            Validations validationsignoutdate = new Validations();
-            bool signout_validate = validationsignoutdate.ValidateDateTime(userrequest.SignOutDate.ToUniversalTime());
-            if (signout_validate == false)
-            {
-                obj_userresponse.success = false;
-                obj_userresponse.Message = "Enter time value in SignOut Date";
-            }
+            obj_userresponse = validation_func(userrequest); 
 
             if (obj_userresponse.success == false)
             {
@@ -93,8 +70,8 @@ namespace SollisHealth.Navigator.Controllers
                 else
                 {
                     _logger.LogError("User SignIn Id not found in " + DateTime.Now);
-                    obj_userresponse = BuildUserSignInResponseMessage(userlistobj.Message, false, 404);
-                    return BadRequest(obj_userresponse);
+                    obj_userresponserepo = BuildUserSignInResponseMessage(userlistobj.Message, false, 404);
+                    return BadRequest(obj_userresponserepo);
                 }
             }
 
@@ -105,8 +82,9 @@ namespace SollisHealth.Navigator.Controllers
         [Route("UserSignOut")]
         public async Task<IActionResult> UpdateUserSignOut(UpdateSignInUserRequest userrequest)
         {
-            _logger.LogInformation("Navigator Controller is running in " + DateTime.Now);
+            _logger.LogInformation("User Navigator Controller is running in " + DateTime.Now);
             UserSignOutValidationResponse response = null;
+
             UserSignOutResponse userlistobj = await _IUpdateUserSignOut.UpdateUserSignout(userrequest);
             if (userlistobj.success != false)
             {              
@@ -127,7 +105,7 @@ namespace SollisHealth.Navigator.Controllers
         [Route("GetSignInStatus")]
         public async Task<IActionResult> GetSignInStatus(GetSignInStatusUserRequest userrequest)
         {
-            _logger.LogInformation("Navigator Controller is running in " + DateTime.Now);
+            _logger.LogInformation("User Navigator Controller is running in " + DateTime.Now);
             GetSignInStatusValidationResponse response = null;
 
 
@@ -148,8 +126,42 @@ namespace SollisHealth.Navigator.Controllers
             }
 
         }
+        private UserSignInValidationResponse validation_func(SignInUserUIRequest userrequest)
+        {
+            UserSignInValidationResponse validationresponse = new UserSignInValidationResponse();
+            Validations validationsignindate = new Validations();
+            Validations validationsignoutdate = new Validations();
 
-   
+            validationresponse.success = true;
+            validationresponse.Message = "";
+
+            if (userrequest.UserEmail.Trim() != "")
+            {
+                Validations emailcontext = new Validations();
+                bool email_validate = emailcontext.ValidateEmail(userrequest.UserEmail.Trim());
+
+                if (email_validate == false)
+                {
+                    validationresponse.success = false;
+                    validationresponse.Message = userrequest.UserEmail + " is Invalid Email Address";
+                    return validationresponse;
+                }
+            }
+            if (validationsignindate.ValidateDateTime(userrequest.SignInDate.ToUniversalTime())==false)
+            {  
+                validationresponse.success = false;
+                validationresponse.Message = "Enter time value in SignIn Date";                
+            }
+            else if (validationsignoutdate.ValidateDateTime(userrequest.SignOutDate.ToUniversalTime())==false)
+            {
+                validationresponse.success = false;
+                validationresponse.Message = "Enter time value in SignOut Date";
+                
+            }
+            return validationresponse;
+        }
+
+
         //This method is used build response to send to client
         private GetSignInStatusValidationResponse BuildUserSignInStatusResponseMessage(string message, bool boolmsg, int statuscode)
         {
